@@ -12,32 +12,33 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
-"import dj_database_url"
+import dj_database_url
 import environ
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-cloudinary.config( 
-    cloud_name = "dh3kwgp0z", 
-    api_key = "856853749719983", 
-    api_secret = "dQcgHQlQw_v1OVQjoW5Qq7OX0DE", 
-    secure=True
-)
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+environ.Env.read_env()
 
 
+cloudinary.config( 
+    cloud_name = "dh3kwgp0z", 
+    api_key = "856853749719983", 
+    api_secret = env('CLOUDINARY_API_SECRET'), 
+    secure=True
+)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k+epr)cir*7c%=^)1r---uec(up)*t=^v$h&*g_k!nu_)rth(-'
+SECRET_KEY = env('SECRETKEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -63,9 +64,7 @@ INSTALLED_APPS = [
 ]
 AUTH_USER_MODEL = 'login.Usuario'  
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
-env = environ.Env()
-environ.Env.read_env()
+GOOGLE_MAPS_API_KEY = env("GOOGLE_MAPS_API_KEY")
 GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')
 
 
@@ -106,7 +105,8 @@ WSGI_APPLICATION = 'SIAT.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
+if not os.environ.get('LOCAL')==True:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',  # Usar el backend de PostGIS
         'NAME': 'siat_db',
@@ -116,6 +116,13 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+else:
+    DATABASES = {
+    'default': dj_database_url.config(default=os.environ['DATABASE_URL'])
+}
+
+
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

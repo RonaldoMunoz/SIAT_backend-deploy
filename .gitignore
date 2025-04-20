@@ -9,6 +9,7 @@ venv/
 
 # Configuración del entorno
 .envrc
+.env
 
 # Archivos de bases de datos locales
 db.sqlite3
