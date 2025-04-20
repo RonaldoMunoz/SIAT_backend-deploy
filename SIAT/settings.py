@@ -15,9 +15,10 @@ import os
 import dj_database_url
 import environ
 import cloudinary
-import cloudinary.uploader
+import cloudinary_storage
 import cloudinary.api
-
+import cloudinary.uploader
+import cloudinary_storage.storage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +44,7 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -65,7 +67,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'login.Usuario'  
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 GOOGLE_MAPS_API_KEY = env("GOOGLE_MAPS_API_KEY")
-GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')
+
 
 
 
